@@ -30,6 +30,12 @@ No, once the plugin is activated it takes care of the rest.
 
 == Changelog ==
 
+= 0.1.4 =
+* Be more flexible dealing with trailing slash vs. no trailing slash
+
+= 0.1.3 =
+* Suspend should really be unsubscribe
+
 = 0.1.2 =
 * Look for WP_Error being returned when sending a ping
 

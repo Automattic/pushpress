@@ -71,6 +71,20 @@ class PuSHPress {
 		if ( $_POST['hub_topic'] == get_bloginfo( 'atom_url' ) )
 			$allowed = TRUE;
 
+		// If there is no trailing slash on the requested feed URL
+		// see if there is a match when a trailing slash is added
+		if ( substr( $_POST['hub_topic'], -1, 1 ) != '/' ) {
+			$topic_with_slash = $_POST['hub_topic'] . '/';
+
+			if ( $topic_with_slash == get_bloginfo( 'rss2_url' ) ) {
+				$_POST['hub_topic'] = $topic_with_slash;
+				$allowed = TRUE;
+			} elseif ( $topic_with_slash == get_bloginfo( 'atom_url' ) ) {
+				$_POST['hub_topic'] = $topic_with_slash;
+				$allowed = TRUE;
+			}
+		}
+
 		if ( $allowed === FALSE ) {
 			do_action( 'pushpress_topic_failure' );
 

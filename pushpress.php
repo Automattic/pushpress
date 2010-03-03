@@ -3,7 +3,7 @@
 Plugin Name: PuSHPress
 Plugin URI:
 Description: PubSubHubbub plugin for WordPress that includes the hub
-Version: 0.1.2
+Version: 0.1.4
 Author: Joseph Scott
 Author URI:
 License: GPLv2
@@ -11,7 +11,7 @@ License: GPLv2
 require_once dirname( __FILE__ ) . '/class-pushpress.php';
 require_once dirname( __FILE__ ) . '/send-ping.php';
 
-define( 'PUSHPRESS_VERSION', '0.1.2' );
+define( 'PUSHPRESS_VERSION', '0.1.4' );
 
 if ( !defined( 'PUSHPRESS_CLASS' ) )
 	define( 'PUSHPRESS_CLASS', 'PuSHPress' );

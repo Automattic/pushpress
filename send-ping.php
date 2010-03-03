@@ -63,7 +63,7 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		$status_code = (int) $response['response']['code'];
 		if ( $status_code < 200 || $status_code > 299 ) {
 			do_action( 'pushpress_ping_not_2xx_failure' );
-			$pushpress->suspend_callback( $feed_url, $callback );
+			$pushpress->unsubscribe_callback( $feed_url, $callback );
 			return FALSE;
 		}
 	} // function send_ping
