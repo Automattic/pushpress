@@ -30,10 +30,16 @@ No, once the plugin is activated it takes care of the rest.
 
 == Changelog ==
 
+= 0.1.2 =
+* Look for WP_Error being returned when sending a ping
+
 = 0.1.1 =
 * Initial release
 
 == Upgrade Notice ==
+
+= 0.1.2 =
+Improved error checking
 
 = 0.1.1 =
 New PubSubHubbub plugin

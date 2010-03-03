@@ -50,14 +50,21 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		$response = wp_remote_post( $callback, $remote_opt );
 
 		// look for failures
+		if ( is_wp_error( $result ) ) {
+			do_action( 'pushpress_ping_wp_error' );
+			return FALSE;
+		}
+
 		if ( isset( $response->errors['http_request_failed'][0] ) ) {
 			do_action( 'pushpress_ping_http_failure' );
+			return FALSE;
 		}
 
 		$status_code = (int) $response['response']['code'];
 		if ( $status_code < 200 || $status_code > 299 ) {
 			do_action( 'pushpress_ping_not_2xx_failure' );
 			$pushpress->suspend_callback( $feed_url, $callback );
+			return FALSE;
 		}
 	} // function send_ping
 } // if !function_exists 
