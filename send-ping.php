@@ -3,6 +3,10 @@ add_action( 'pushpress_scheduled_ping', 'pushpress_send_ping', 10, 4 );
 if ( !function_exists( 'pushpress_send_ping' ) ) {
 	function pushpress_send_ping( $callback, $post_id, $feed_type, $secret ) {
 		global $pushpress;
+
+		// Need to make sure that the PuSHPress options are initialized
+		$pushpress->init( );
+
 		do_action( 'pushpress_send_ping' );
 
 		$remote_opt = array(

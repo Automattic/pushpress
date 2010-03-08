@@ -30,6 +30,13 @@ No, once the plugin is activated it takes care of the rest.
 
 == Changelog ==
 
+= 0.1.5 =
+* When sending out pings we need to make sure that the PuSHPress
+  options have been initialized
+* Apply the hub array filter later in the process, as part of
+  the feed head filter
+* Verify unsubscribe requests (noticed by James Holderness)
+
 = 0.1.4 =
 * Be more flexible dealing with trailing slash vs. no trailing slash
 
