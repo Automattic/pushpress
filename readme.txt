@@ -30,6 +30,10 @@ No, once the plugin is activated it takes care of the rest.
 
 == Changelog ==
 
+= 0.1.6 =
+* Force enclosure processing to happen before sending out a ping
+* Make the plugin site wide for WPMU/multi-site installs
+
 = 0.1.5 =
 * When sending out pings we need to make sure that the PuSHPress
   options have been initialized

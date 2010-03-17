@@ -18,6 +18,10 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 			'user-agent'	=> $pushpress->http_user_agent
 		);
 
+		$post = get_post( $post_id );
+		do_enclose( $post->post_content, $post_id );
+		update_postmeta_cache( array( $post_id ) );
+
 		query_posts( "p={$post_id}" );
 		ob_start( );
 
