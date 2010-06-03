@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: josephscott, automattic
 Plugin Name: PushPress
-Tags: pubsubhubbub, push
+Tags: pubsubhubbub, push, WordPress.com
 Requires at least: 2.9
 Tested up to: 2.9
 License: GPLv2
