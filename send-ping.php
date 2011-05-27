@@ -2,7 +2,11 @@
 add_action( 'pushpress_scheduled_ping', 'pushpress_send_ping', 10, 4 );
 if ( !function_exists( 'pushpress_send_ping' ) ) {
 	function pushpress_send_ping( $callback, $post_id, $feed_type, $secret ) {
-		global $pushpress;
+		global $pushpress, $current_user;
+
+		// Do all WP_Query calcs and send feeds as logged-out user.
+		$old_user_id = $current_user->ID;
+		wp_set_current_user( 0 );
 
 		// Need to make sure that the PuSHPress options are initialized
 		$pushpress->init( );
@@ -19,8 +23,18 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		);
 
 		$post = get_post( $post_id );
+		$post_status_obj = get_post_status_object( $post->post_status );
+		if ( !$post_status_obj->public ) {
+			do_action( 'pushpress_nonpublic_post', $post_id );
+			wp_set_current_user( $old_user_id );
+			return false;
+		}
 		do_enclose( $post->post_content, $post_id );
 		update_postmeta_cache( array( $post_id ) );
+
+		// make sure the channel title stays consistent
+		// without this it would append the post title as well
+		add_filter( 'wp_title', '__return_false', 999 );
 
 		query_posts( "p={$post_id}" );
 		ob_start( );
@@ -58,13 +72,15 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		$response = wp_remote_post( $callback, $remote_opt );
 
 		// look for failures
-		if ( is_wp_error( $result ) ) {
+		if ( is_wp_error( $response ) ) {
 			do_action( 'pushpress_ping_wp_error' );
+			wp_set_current_user( $old_user_id );
 			return FALSE;
 		}
 
 		if ( isset( $response->errors['http_request_failed'][0] ) ) {
 			do_action( 'pushpress_ping_http_failure' );
+			wp_set_current_user( $old_user_id );
 			return FALSE;
 		}
 
@@ -72,7 +88,10 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		if ( $status_code < 200 || $status_code > 299 ) {
 			do_action( 'pushpress_ping_not_2xx_failure' );
 			$pushpress->unsubscribe_callback( $feed_url, $callback );
+			wp_set_current_user( $old_user_id );
 			return FALSE;
 		}
+
+		wp_set_current_user( $old_user_id );
 	} // function send_ping
 } // if !function_exists 

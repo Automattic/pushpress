@@ -58,39 +58,58 @@ class PuSHPress {
 		}
 	}
 
+	// removes scheme, sets up URLs to be prefix matched
+	function normalize_url( $url ) {
+		if ( is_array( $url ) )
+			return array_map( array( $this, __FUNCTION__ ), $url );
+
+		$url = preg_replace( '#^https?://#', '', $url );
+
+		// To normalize query params, we would normally need to sort them.
+		// The spec says order matters, though.  That makes it easier for us.
+		@list( $path, $query ) = explode( '?', $url );
+		$query = empty( $query ) ? '' : rtrim( $query, '&' ) . '&';
+		return rtrim( $path, '/' ) . "/?$query";
+	}
+
+	function feed_urls() {
+		return array(
+			get_bloginfo( 'rss2_url' ),
+			get_bloginfo( 'atom_url' ),
+		);
+	}
+
 	function check_topic( ) {
 		$allowed = FALSE;
 
-		if ( $_POST['hub_topic'] == get_bloginfo( 'rss2_url' ) )
-			$allowed = TRUE;
+		$feed_urls = $this->feed_urls();
 
-		if ( $_POST['hub_topic'] == get_bloginfo( 'atom_url' ) )
-			$allowed = TRUE;
+		$allowed_bases = $this->normalize_url( $feed_urls );
+		$check_hub_topic = $this->normalize_url( trim( stripslashes( $_POST['hub_topic'] ) ) );
 
-		// If there is no trailing slash on the requested feed URL
-		// see if there is a match when a trailing slash is added
-		if ( substr( $_POST['hub_topic'], -1, 1 ) != '/' ) {
-			$topic_with_slash = $_POST['hub_topic'] . '/';
-
-			if ( $topic_with_slash == get_bloginfo( 'rss2_url' ) ) {
-				$_POST['hub_topic'] = $topic_with_slash;
-				$allowed = TRUE;
-			} elseif ( $topic_with_slash == get_bloginfo( 'atom_url' ) ) {
-				$_POST['hub_topic'] = $topic_with_slash;
-				$allowed = TRUE;
+		foreach ( $allowed_bases as $k => $allowed_base ) {
+			if ( $check_hub_topic == $allowed_base ) {
+				$allowed = $feed_urls[$k];
+				break;
 			}
 		}
 
 		if ( $allowed === FALSE ) {
 			do_action( 'pushpress_topic_failure' );
+			if ( is_ssl() ) {
+				foreach ( $feed_urls as $k => $url )
+					$feed_urls[$k] = str_replace( 'https://', 'http://', $url );
+			}
 
 			$msg = 'hub_topic - ' . $_POST['hub_topic'];
 			$msg .= ' - is value is not allowed.  ';
-			$msg .= 'You may only subscribe to ' . get_bloginfo( 'rss2_url' );
-			$msg .= ' or ' . get_bloginfo( 'atom_url' );
+			$msg .= 'You may only subscribe to ' . $feed_urls[0];
+			$msg .= ' or ' . $feed_urls[1];
 
 			$this->return_error( $msg );
 		}
+
+		return $allowed;
 	}
 
 	function get_subscribers( $feed_url ) {
@@ -286,18 +305,18 @@ class PuSHPress {
 		) );
 
 		// look for failure indicators
-		if ( isset( $response->errors['http_request_failed'][0] ) ) {
+		if ( is_wp_error( $response ) ) {
 			do_action( 'pushpress_verify_http_failure' );
 			$this->return_error( "Error verifying callback URL - {$response->errors['http_request_failed'][0]}" );
 		}
 
-		$status_code = (int) $response['response']['code'];
+		$status_code = (int) wp_remote_retrieve_response_code( $response );
 		if ( $status_code < 200 || $status_code > 299 ) {
 			do_action( 'pushpress_verify_not_2xx_failure' );
 			$this->return_error( "Error verifying callback URL, HTTP status code: {$status_code}" );
 		}
 
-		if ( trim( $response['body'] ) != $challenge ) {
+		if ( trim( wp_remote_retrieve_body( $response ) ) != $challenge ) {
 			do_action( 'pushpress_verify_challenge_failure' );
 			$this->return_error( 'Error verifying callback URL, the challenge token did not match' );
 		}

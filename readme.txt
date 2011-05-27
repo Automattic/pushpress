@@ -30,6 +30,13 @@ No, once the plugin is activated it takes care of the rest.
 
 == Changelog ==
 
+= 0.1.7 =
+* Fix typo during error handling (reported by John Godley)
+* Improve HTTP error detection ( Andrew Nacin )
+* Make sure the channel title in pings matches the channel title in the regular feed ( reported by Hugo Hallqvist )
+* Normalize feed URLs ( Mike Adams )
+* Make sure the WP environment has no one logged in when querying post data for pings ( Mike Adams )
+
 = 0.1.6 =
 * Force enclosure processing to happen before sending out a ping
 * Make the plugin site wide for WPMU/multi-site installs
