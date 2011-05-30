@@ -307,7 +307,7 @@ class PuSHPress {
 		// look for failure indicators
 		if ( is_wp_error( $response ) ) {
 			do_action( 'pushpress_verify_http_failure' );
-			$this->return_error( "Error verifying callback URL - {$response->errors['http_request_failed'][0]}" );
+			$this->return_error('"Error verifying callback URL - ' . $response->get_error_message() );
 		}
 
 		$status_code = (int) wp_remote_retrieve_response_code( $response );
