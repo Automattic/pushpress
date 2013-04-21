@@ -154,12 +154,14 @@ class PuSHPress {
 	}
 
 	function hub_link_rss2( ) {
-		$hubs = apply_filters( 'pushpress_hubs', array(
-			get_bloginfo( 'url' ) . '/?pushpress=hub'
-		) );
-
-		foreach ( (array) $hubs as $hub ) {
-			echo "\t<atom:link rel='hub' href='{$hub}'/>\n";
+		if ( is_feed() ) {
+			$hubs = apply_filters( 'pushpress_hubs', array(
+				get_bloginfo( 'url' ) . '/?pushpress=hub'
+			) );
+	
+			foreach ( (array) $hubs as $hub ) {
+				echo "\t<atom:link rel='hub' href='{$hub}'/>\n";
+			}
 		}
 	}
 
