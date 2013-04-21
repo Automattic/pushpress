@@ -5,6 +5,7 @@ Tags: pubsubhubbub, push, WordPress.com
 Requires at least: 2.9
 Tested up to: 3.6
 License: GPLv2
+Stable tag: 0.1.7.2
 
 Add PubSubHubbub support to your WordPress site, with a built in hub.
 
