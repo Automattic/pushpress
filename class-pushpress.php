@@ -300,7 +300,7 @@ class PuSHPress {
 			$url .= '?' . $hub_vars;
 		}
 
-		$response = wp_remote_get( $url, array(
+		$response = wp_safe_remote_get( $url, array(
 			'sslverify'		=> FALSE,
 			'timeout'		=> $this->http_timeout,
 			'user-agent'	=> $this->http_user_agent,

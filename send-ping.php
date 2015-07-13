@@ -69,7 +69,7 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 			);
 		}
 
-		$response = wp_remote_post( $callback, $remote_opt );
+		$response = wp_safe_remote_post( $callback, $remote_opt );
 
 		// look for failures
 		if ( is_wp_error( $response ) ) {

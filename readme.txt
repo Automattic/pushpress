@@ -3,9 +3,9 @@ Contributors: josephscott, automattic, westi
 Plugin Name: PushPress
 Tags: pubsubhubbub, push, WordPress.com
 Requires at least: 2.9
-Tested up to: 4.1
+Tested up to: 4.2
 License: GPLv2
-Stable tag: 0.1.7.2
+Stable tag: 0.1.8
 
 Add PubSubHubbub support to your WordPress site, with a built in hub.
 
@@ -30,6 +30,9 @@ Other plugins use 3rd party hubs to relay updates out to subscribers.  This plug
 No, once the plugin is activated it takes care of the rest.
 
 == Changelog ==
+
+= 0.1.8 =
+* Use wp_safe_remote_*() instead of wp_remote_*()
 
 = 0.1.7.2 =
 * Make sure to only output the hub information in feeds
