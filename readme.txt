@@ -1,9 +1,9 @@
 === Plugin Name ===
-Contributors: josephscott, automattic, westi
+Contributors: josephscott, automattic, westi, kraftbj
 Plugin Name: PushPress
 Tags: pubsubhubbub, push, WordPress.com
 Requires at least: 2.9
-Tested up to: 4.2
+Tested up to: 4.8
 License: GPLv2
 Stable tag: 0.1.8
 
@@ -30,6 +30,10 @@ Other plugins use 3rd party hubs to relay updates out to subscribers.  This plug
 No, once the plugin is activated it takes care of the rest.
 
 == Changelog ==
+
+= 0.1.9 =
+* Update plugin header to avoid deprecated argument warnings
+* Bump stable to 4.8
 
 = 0.1.8 =
 * Use wp_safe_remote_*() instead of wp_remote_*()
