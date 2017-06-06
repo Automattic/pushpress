@@ -33,6 +33,7 @@ No, once the plugin is activated it takes care of the rest.
 
 = 0.1.9 =
 * Update plugin header to avoid deprecated argument warnings
+* Update class constructor to modern PHP
 * Bump stable to 4.8
 
 = 0.1.8 =

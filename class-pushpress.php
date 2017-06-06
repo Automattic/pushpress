@@ -3,7 +3,7 @@ class PuSHPress {
 	var $http_timeout;
 	var $http_user_agent;
 
-	function PuSHPress( ) { }
+	function __construct( ) { }
 
 	function init( ) {
 		// Let other plugins modify various options
