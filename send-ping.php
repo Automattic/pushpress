@@ -4,6 +4,10 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 	function pushpress_send_ping( $callback, $post_id, $feed_type, $secret ) {
 		global $pushpress, $current_user;
 
+		if ( apply_filters( 'disable_pushpress_send_ping', false ) ) {
+			return false;
+		}
+
 		// Do all WP_Query calcs and send feeds as logged-out user.
 		$old_user_id = $current_user->ID;
 		wp_set_current_user( 0 );
@@ -42,7 +46,9 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		$feed_url = FALSE;
 		if ( $feed_type == 'rss2' ) {
 			do_action( 'pushpress_send_ping_rss2' );
-			$feed_url = get_bloginfo( 'rss2_url' );
+			$feed_url = get_feed_link( 'rss2' );
+			$pushpress->feed_url = $feed_url;
+			add_filter( 'self_link', 'pushpress_filter_self_link', 999 );
 
 			$remote_opt['headers']['Content-Type'] = 'application/rss+xml';
 			$remote_opt['headers']['Content-Type'] .= '; charset=' . get_option( 'blog_charset' );
@@ -50,7 +56,9 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 			@load_template( ABSPATH . WPINC . '/feed-rss2.php' );
 		} elseif ( $feed_type == 'atom' ) {
 			do_action( 'pushpress_send_ping_atom' );
-			$feed_url = get_bloginfo( 'atom_url' );
+			$feed_url = get_feed_link( 'atom' );
+			$pushpress->feed_url = $feed_url;
+			add_filter( 'self_link', 'pushpress_filter_self_link', 999 );
 
 			$remote_opt['headers']['Content-Type'] = 'application/atom+xml';
 			$remote_opt['headers']['Content-Type'] .= '; charset=' . get_option( 'blog_charset' );
@@ -58,6 +66,7 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 			@load_template( ABSPATH . WPINC . '/feed-atom.php' );
 		}
 
+		$remote_opt['headers']['X-Hub-Self'] = $feed_url;
 		$remote_opt['body'] = ob_get_contents( );
 		ob_end_clean( );
 
@@ -95,3 +104,11 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		wp_set_current_user( $old_user_id );
 	} // function send_ping
 } // if !function_exists 
+
+function pushpress_filter_self_link( $orig_url ) {
+	global $pushpress;
+
+	// In some cases self_link could be non-feed URLs,
+	// from wp-admin or do_wp_cron, so make sure it uses the real feed URL.
+	return $pushpress->feed_url;
+}
