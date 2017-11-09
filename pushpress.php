@@ -4,7 +4,7 @@ Plugin Name: PuSHPress
 Plugin URI:
 Description: WebSub/PubSubHubbub plugin for WordPress that includes the hub
 Version: 0.1.9
-Author: Joseph Scott
+Author: Joseph Scott & Automattic
 Author URI:
 License: GPLv2
 Network: true

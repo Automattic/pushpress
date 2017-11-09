@@ -1,11 +1,11 @@
-=== Plugin Name ===
+=== PuSHPress ===
 Contributors: josephscott, automattic, westi, kraftbj
 Plugin Name: PushPress
 Tags: websub, pubsubhubbub, push, WordPress.com
 Requires at least: 2.9
 Tested up to: 4.8
 License: GPLv2
-Stable tag: 0.1.8
+Stable tag: 0.1.9
 
 Add WebSub (formerly known as PubSubHubbub) support to your WordPress site, with a built in hub.
 
