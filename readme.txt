@@ -35,7 +35,10 @@ No, once the plugin is activated it takes care of the rest.
 * Update plugin header to avoid deprecated argument warnings
 * Update class constructor to modern PHP
 * Update readme to reflect new name for the standard (WebSub)
-* Bump stable to 4.8
+* Correct duplicate filter name
+* Add disable_pushpress_send_ping filter to disable pings when needed
+* Add X-Hub-Self headers
+* Bump stable to 4.9
 
 = 0.1.8 =
 * Use wp_safe_remote_*() instead of wp_remote_*()
