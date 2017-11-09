@@ -8,7 +8,7 @@ class PuSHPress {
 	function init( ) {
 		// Let other plugins modify various options
 		$this->http_timeout = apply_filters( 'pushpress_http_timeout', 5 );
-		$this->http_user_agent = apply_filters( 'pushpress_http_timeout', 'WordPress/PuSHPress ' . PUSHPRESS_VERSION );
+		$this->http_user_agent = apply_filters( 'pushpress_http_user_agent', 'WordPress/PuSHPress ' . PUSHPRESS_VERSION );
 
 		// Make sure the hubs get listed in the RSS2 and Atom feeds
 		add_action( 'rss2_head', array( &$this, 'hub_link_rss2' ) );
@@ -73,10 +73,10 @@ class PuSHPress {
 	}
 
 	function feed_urls() {
-		return array(
+		return apply_filters( 'pushpress_feed_urls', array(
 			get_bloginfo( 'rss2_url' ),
 			get_bloginfo( 'atom_url' ),
-		);
+		) );
 	}
 
 	function check_topic( ) {
