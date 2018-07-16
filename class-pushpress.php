@@ -46,9 +46,6 @@ class PuSHPress {
 		if ( empty( $_POST['hub_topic'] ) )
 			$this->return_error( 'hub.topic is empty' );
 
-		if ( empty( $_POST['hub_verify'] ) )
-			$this->return_error( 'hub.verify is empty' );
-
 		// mode has a small set of valid values
 		$_POST['hub_mode'] = strtolower( $_POST['hub_mode'] );
 		if ( $_POST['hub_mode'] != 'subscribe' ) {
@@ -252,12 +249,6 @@ class PuSHPress {
 		$hub_vars .= '&hub.mode=' . urlencode( $_POST['hub_mode'] );
 		$hub_vars .= '&hub.topic=' . urlencode( $_POST['hub_topic'] );
 		$hub_vars .= '&hub.challenge=' . urlencode( $challenge );
-
-		if ( !empty( $_POST['hub_verify_token'] ) ) {
-			do_action( 'pushpress_include_verify_token' );
-			$hub_vars .= '&hub.verify_token=';
-			$hub_vars .= urlencode( $_POST['hub_verify_token'] );
-		}
 
 		$callback = parse_url( $_POST['hub_callback'] );
 
