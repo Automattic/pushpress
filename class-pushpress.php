@@ -215,7 +215,7 @@ class PuSHPress {
 
 	function return_ok( ) {
 		header( 'Content-Type: text/plain; charset=utf-8' );
-		header( 'HTTP/1.0 204 No Content' );
+		header( 'HTTP/1.0 202 Accepted' );
 		exit;
 	}
 
