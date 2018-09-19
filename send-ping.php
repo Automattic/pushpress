@@ -1,7 +1,7 @@
 <?php
-add_action( 'pushpress_scheduled_ping', 'pushpress_send_ping', 10, 4 );
+add_action( 'pushpress_scheduled_ping', 'pushpress_send_ping', 10, 5 );
 if ( !function_exists( 'pushpress_send_ping' ) ) {
-	function pushpress_send_ping( $callback, $post_id, $feed_type, $secret ) {
+	function pushpress_send_ping( $callback, $post_id, $feed_type, $feed_url, $secret ) {
 		global $pushpress, $current_user;
 
 		if ( apply_filters( 'disable_pushpress_send_ping', false ) ) {
@@ -43,10 +43,8 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		query_posts( "p={$post_id}" );
 		ob_start( );
 
-		$feed_url = FALSE;
 		if ( $feed_type == 'rss2' ) {
 			do_action( 'pushpress_send_ping_rss2' );
-			$feed_url = get_feed_link( 'rss2' );
 			$pushpress->feed_url = $feed_url;
 			add_filter( 'self_link', 'pushpress_filter_self_link', 999 );
 
@@ -56,7 +54,6 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 			@load_template( ABSPATH . WPINC . '/feed-rss2.php' );
 		} elseif ( $feed_type == 'atom' ) {
 			do_action( 'pushpress_send_ping_atom' );
-			$feed_url = get_feed_link( 'atom' );
 			$pushpress->feed_url = $feed_url;
 			add_filter( 'self_link', 'pushpress_filter_self_link', 999 );
 
