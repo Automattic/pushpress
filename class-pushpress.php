@@ -248,7 +248,7 @@ class PuSHPress {
 		$challenge = uniqid( mt_rand( ), TRUE );
 		$challenge .= uniqid( mt_rand( ), TRUE );
 
-		$hub_vars = 'hub.lease_seconds=315360000'; // 10 years
+		$hub_vars = 'hub.lease_seconds=1209600'; // 2 weeks
 		$hub_vars .= '&hub.mode=' . urlencode( $_POST['hub_mode'] );
 		$hub_vars .= '&hub.topic=' . urlencode( $_POST['hub_topic'] );
 		$hub_vars .= '&hub.challenge=' . urlencode( $challenge );
