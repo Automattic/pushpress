@@ -94,7 +94,7 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		}
 
 		$status_code = (int) $response['response']['code'];
-		if ( $status_code < 200 || $status_code > 299 ) {
+		if ( $status_code <= 200 || $status_code > 299 ) {
 			do_action( 'pushpress_ping_not_2xx_failure' );
 			$pushpress->unsubscribe_callback( $feed_url, $callback );
 			wp_set_current_user( $old_user_id );
