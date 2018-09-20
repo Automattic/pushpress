@@ -21,9 +21,6 @@ class PuSHPress {
 		add_action( 'publish_post', array( &$this, 'publish_post' ) );
 	}
 
-
-
-
 	function add_callback( $feed_url, $callback, $secret ) {
 		$subs = get_option( 'pushpress_subscribers' );
 		$subs[$feed_url][$callback] = array(
@@ -223,6 +220,9 @@ class PuSHPress {
 
 			foreach ( $feeds as $feed_url ) {
 				$subs = $this->get_subscribers( $feed_url );
+				if ($subs == FALSE) {
+					continue;
+				}
 				foreach ( (array) $subs as $callback => $data ) {
 					if ( $data['is_active'] == FALSE ) {
 						continue;
