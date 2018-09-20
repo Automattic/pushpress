@@ -63,6 +63,9 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 			@load_template( ABSPATH . WPINC . '/feed-atom.php' );
 		}
 
+		$feed_hub = get_bloginfo( 'url' ) . '/?pushpress=hub';
+
+		$remote_opt['headers']['Link'] = "<{$feed_url}>; rel=self, <{$feed_hub}>; rel=hub";
 		$remote_opt['headers']['X-Hub-Self'] = $feed_url;
 		$remote_opt['body'] = ob_get_contents( );
 		ob_end_clean( );
