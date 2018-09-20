@@ -30,6 +30,7 @@ class PuSHPress {
 			'is_active'		=> TRUE,
 			'secret'		=> $secret,
 			'start_date'	=> gmdate( 'Y-m-d H:i:s' ),
+			'end_date'	=> gmdate( 'Y-m-d H:i:s', strtotime( '+2 weeks' ) ),
 			'unsubscribe'	=> FALSE,
 		);
 		update_option( 'pushpress_subscribers', $subs );
@@ -198,10 +199,19 @@ class PuSHPress {
 		}
 	}
 
+	function evaluate_callback( $callback, $feed_url, $sub ) {
+		if ( $sub['is_active'] == FALSE)
+			return FALSE;
+		elseif ( empty( $sub['end_date'] ) == FALSE && $sub['end_date'] <= gmdate( 'Y-m-d H:i:s' ) ) {
+			$this->unsubscribe_callback( $feed_url, $callback )
+			return FALSE;
+		}
+		return TRUE;
+	}
 	function publish_post( $post_id ) {
 		$subs = $this->get_subscribers( get_bloginfo( 'rss2_url' ) );
 		foreach ( (array) $subs as $callback => $data ) {
-			if ( $data['is_active'] == FALSE )
+			if ( evaluate_callback( $callback, get_bloginfo( 'rss2_url' ), $data ) == FALSE )
 				continue;
 
 			$this->schedule_ping( $callback, $post_id, 'rss2', $data['secret'] );
@@ -209,7 +219,7 @@ class PuSHPress {
 
 		$subs = $this->get_subscribers( get_bloginfo( 'atom_url' ) );
 		foreach ( (array) $subs as $callback => $data ) {
-			if ( $data['is_active'] == FALSE )
+			if ( evaluate_callback( $callback, get_bloginfo( 'atom_url' ), $data ) == FALSE )
 				continue;
 
 			$this->schedule_ping( $callback, $post_id, 'atom', $data['secret'] );
@@ -248,7 +258,7 @@ class PuSHPress {
 		$challenge = uniqid( mt_rand( ), TRUE );
 		$challenge .= uniqid( mt_rand( ), TRUE );
 
-		$hub_vars = 'hub.lease_seconds=315360000'; // 10 years
+		$hub_vars = 'hub.lease_seconds=1209600'; // 2 weeks
 		$hub_vars .= '&hub.mode=' . urlencode( $_POST['hub_mode'] );
 		$hub_vars .= '&hub.topic=' . urlencode( $_POST['hub_topic'] );
 		$hub_vars .= '&hub.challenge=' . urlencode( $challenge );
