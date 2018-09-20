@@ -19,7 +19,8 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 
 		$remote_opt = array(
 			'headers'		=> array(
-				'format'	=> $feed_type
+				'format'	=> $feed_type,
+				'Expect'	=> '',
 			),
 			'sslverify'		=> FALSE,
 			'timeout'		=> $pushpress->http_timeout,
