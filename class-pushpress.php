@@ -286,7 +286,7 @@ class PuSHPress {
 		$path = '/';
 		if ( !empty( $callback['path'] ) ) {
 			$path = str_replace( '@', '', $callback['path'] );
-			if ( $path{0} != '/' ) {
+			if ( $path[0] != '/' ) {
 				$path = '/' . $path;
 			}
 
