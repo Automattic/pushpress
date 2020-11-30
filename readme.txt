@@ -5,7 +5,7 @@ Tags: websub, pubsubhubbub, push, WordPress.com
 Requires at least: 2.9
 Tested up to: 5.6
 License: GPLv2
-Stable tag: 0.1.20
+Stable tag: 0.1.10
 
 Add WebSub (formerly known as PubSubHubbub) support to your WordPress site, with a built in hub.
 
@@ -31,7 +31,7 @@ No, once the plugin is activated it takes care of the rest.
 
 == Changelog ==
 
-= 0.1.20 =
+= 0.1.10 =
 * Resolves notice in PHP 7.4/fatal in PHP 8.0 due to deprecation of curly-brace array notation.
 
 = 0.1.9 =
