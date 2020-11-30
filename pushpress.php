@@ -1,18 +1,18 @@
 <?php
 /*
-Plugin Name: PuSHPress
-Plugin URI:
-Description: WebSub/PubSubHubbub plugin for WordPress that includes the hub
-Version: 0.1.9
-Author: Joseph Scott & Automattic
-Author URI:
-License: GPLv2
-Network: true
+ * Plugin Name: PuSHPress
+ * Plugin URI: https://automattic.com
+ * Description: WebSub/PubSubHubbub plugin for WordPress that includes the hub
+ * Version: 0.1.20
+ * Author: Joseph Scott & Automattic
+ * Author URI: https://automattic.com
+ * License: GPLv2 or later.
+ * Network: true
  */
 require_once dirname( __FILE__ ) . '/class-pushpress.php';
 require_once dirname( __FILE__ ) . '/send-ping.php';
 
-define( 'PUSHPRESS_VERSION', '0.1.9' );
+define( 'PUSHPRESS_VERSION', '0.1.20' );
 
 if ( !defined( 'PUSHPRESS_CLASS' ) )
 	define( 'PUSHPRESS_CLASS', 'PuSHPress' );

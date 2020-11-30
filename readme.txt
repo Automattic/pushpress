@@ -3,9 +3,9 @@ Contributors: josephscott, automattic, westi, kraftbj
 Plugin Name: PushPress
 Tags: websub, pubsubhubbub, push, WordPress.com
 Requires at least: 2.9
-Tested up to: 4.8
+Tested up to: 5.6
 License: GPLv2
-Stable tag: 0.1.9
+Stable tag: 0.1.20
 
 Add WebSub (formerly known as PubSubHubbub) support to your WordPress site, with a built in hub.
 
@@ -30,6 +30,9 @@ Other plugins use 3rd party hubs to relay updates out to subscribers.  This plug
 No, once the plugin is activated it takes care of the rest.
 
 == Changelog ==
+
+= 0.1.20 =
+* Resolves notice in PHP 7.4/fatal in PHP 8.0 due to deprecation of curly-brace array notation.
 
 = 0.1.9 =
 * Update plugin header to avoid deprecated argument warnings
