@@ -3,7 +3,7 @@ Contributors: josephscott, automattic, westi, kraftbj
 Plugin Name: PushPress
 Tags: websub, pubsubhubbub, push, WordPress.com
 Requires at least: 2.9
-Tested up to: 5.6
+Tested up to: 5.7
 License: GPLv2
 Stable tag: 0.1.10
 
