@@ -239,8 +239,8 @@ class PuSHPress {
 
 	function unsubscribe_callback( $feed_url, $callback ) {
 		$subs = get_option( 'pushpress_subscribers' );
-		$subs[$feed_url][$callback]['is_active'] = FALSE;
-		$subs[$feed_url][$callback]['unsubscribe'] = TRUE;
+		if ( !empty( $subs ) && !empty( $subs[$feed_url] ) && !empty( $subs[$feed_url][$callback] ) )
+			unset($subs[$feed_url][$callback]);
 		update_option( 'pushpress_subscribers', $subs );
 	}
 
