@@ -21,9 +21,6 @@ class PuSHPress {
 		add_action( 'publish_post', array( &$this, 'publish_post' ) );
 	}
 
-
-
-
 	function add_callback( $feed_url, $callback, $secret ) {
 		$subs = get_option( 'pushpress_subscribers' );
 		$subs[$feed_url][$callback] = array(
@@ -73,10 +70,22 @@ class PuSHPress {
 	}
 
 	function feed_urls() {
-		return apply_filters( 'pushpress_feed_urls', array(
+		$feeds = array(
 			get_bloginfo( 'rss2_url' ),
 			get_bloginfo( 'atom_url' ),
-		) );
+		);
+
+		$terms = get_terms( array( 'hide_empty' => TRUE ) );
+		foreach ( $terms as $term ) {
+			foreach ( array( 'rss2', 'atom' ) as $feed_type ) {
+				$taxonomy_url = get_term_feed_link( $term->term_id, $term->taxonomy, $feed_type );
+				if ( $taxonomy_url ) {
+					$feeds[] = $taxonomy_url;
+				}
+			}
+		}
+
+		return apply_filters( 'pushpress_feed_urls', $feeds );
 	}
 
 	function check_topic( ) {
@@ -103,8 +112,8 @@ class PuSHPress {
 
 			$msg = 'hub_topic - ' . $_POST['hub_topic'];
 			$msg .= ' - is value is not allowed.  ';
-			$msg .= 'You may only subscribe to ' . $feed_urls[0];
-			$msg .= ' or ' . $feed_urls[1];
+			$msg .= 'You may only subscribe to ';
+			$msg .= implode(', ', $feed_urls);
 
 			$this->return_error( $msg );
 		}
@@ -199,20 +208,29 @@ class PuSHPress {
 	}
 
 	function publish_post( $post_id ) {
-		$subs = $this->get_subscribers( get_bloginfo( 'rss2_url' ) );
-		foreach ( (array) $subs as $callback => $data ) {
-			if ( $data['is_active'] == FALSE )
-				continue;
+		$terms = get_terms( array( 'hide_empty' => TRUE, 'object_ids' => array( $post_id ) ) );
+		foreach ( array( 'rss2', 'atom' ) as $feed_type ) {
+			$feeds = array( get_bloginfo( $feed_type ) );
+			foreach ( $terms as $term ) {
+				$taxonomy_url = get_term_feed_link( $term->term_id, $term->taxonomy, $feed_type );
+				if ( $taxonomy_url ) {
+					$feeds[] = $taxonomy_url;
+				}
+			}
 
-			$this->schedule_ping( $callback, $post_id, 'rss2', $data['secret'] );
-		}
+			foreach ( $feeds as $feed_url ) {
+				$subs = $this->get_subscribers( $feed_url );
+				if ($subs == FALSE) {
+					continue;
+				}
+				foreach ( (array) $subs as $callback => $data ) {
+					if ( $data['is_active'] == FALSE ) {
+						continue;
+					}
 
-		$subs = $this->get_subscribers( get_bloginfo( 'atom_url' ) );
-		foreach ( (array) $subs as $callback => $data ) {
-			if ( $data['is_active'] == FALSE )
-				continue;
-
-			$this->schedule_ping( $callback, $post_id, 'atom', $data['secret'] );
+					$this->schedule_ping( $callback, $post_id, $feed_type, $feed_url, $data['secret'] );
+				}
+			}
 		}
 	}
 
