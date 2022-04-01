@@ -70,7 +70,7 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		$remote_opt['body'] = ob_get_contents( );
 		ob_end_clean( );
 
-		// Figure out the signatur header if we have a secret on
+		// Figure out the signature header if we have a secret on
 		// on file for this callback
 		if ( !empty( $secret ) ) {
 			$remote_opt['headers']['X-Hub-Signature'] = 'sha1=' . hash_hmac(
