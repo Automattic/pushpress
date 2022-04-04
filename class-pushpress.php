@@ -139,7 +139,7 @@ class PuSHPress {
 		if ( isset( $subs[$feed_url] ) ) {
 			return $subs[$feed_url];
 		} else {
-			return FALSE;
+			return array();
 		}
 	}
 
@@ -181,8 +181,6 @@ class PuSHPress {
 			$this->verify_request( );
 		}
 
-		$subs = $this->get_subscribers( $_POST['hub_topic'] );
-
 		$secret = '';
 		if ( !empty( $_POST['hub_secret'] ) )
 			$secret = $_POST['hub_secret'];
@@ -200,17 +198,19 @@ class PuSHPress {
 
 	function publish_post( $post_id ) {
 		$subs = $this->get_subscribers( get_bloginfo( 'rss2_url' ) );
-		foreach ( (array) $subs as $callback => $data ) {
-			if ( $data['is_active'] == FALSE )
+		foreach ( $subs as $callback => $data ) {
+			if ( $data['is_active'] == FALSE ) {
 				continue;
+			}
 
 			$this->schedule_ping( $callback, $post_id, 'rss2', $data['secret'] );
 		}
 
 		$subs = $this->get_subscribers( get_bloginfo( 'atom_url' ) );
-		foreach ( (array) $subs as $callback => $data ) {
-			if ( $data['is_active'] == FALSE )
+		foreach ( $subs as $callback => $data ) {
+			if ( $data['is_active'] == FALSE ) {
 				continue;
+			}
 
 			$this->schedule_ping( $callback, $post_id, 'atom', $data['secret'] );
 		}
