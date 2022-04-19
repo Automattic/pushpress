@@ -40,7 +40,7 @@ if ( !function_exists( 'pushpress_send_ping' ) ) {
 		// without this it would append the post title as well
 		add_filter( 'wp_title', '__return_false', 999 );
 
-		query_posts( "p={$post_id}" );
+		query_posts( "p={$post_id}&feed={$feed_type}" );
 		ob_start( );
 
 		$feed_url = FALSE;
