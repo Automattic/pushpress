@@ -67,7 +67,13 @@ class PuSHPress {
 
 		// To normalize query params, we would normally need to sort them.
 		// The spec says order matters, though.  That makes it easier for us.
-		@list( $path, $query ) = explode( '?', $url );
+		if ( false !== strpos( $url, '?' ) ) {
+			list( $path, $query ) = explode( '?', $url );
+		} else {
+			$path  = $url;
+			$query = '';
+		}
+
 		$query = empty( $query ) ? '' : rtrim( $query, '&' ) . '&';
 		return rtrim( $path, '/' ) . "/?$query";
 	}
