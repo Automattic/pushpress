@@ -104,7 +104,7 @@ class PuSHPress {
 			do_action( 'pushpress_topic_failure' );
 			if ( is_ssl() ) {
 				foreach ( $feed_urls as $k => $url )
-					$feed_urls[$k] = str_replace( 'https://', 'http://', $url );
+					$feed_urls[$k] = str_replace( 'http://', 'https://', $url );
 			}
 
 			$msg = 'hub_topic - ' . $_POST['hub_topic'];
